@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A81C74DD16641B5900A7D8F3 /* grid.plist in Resources */ = {isa = PBXBuildFile; fileRef = A81C74DC16641B5900A7D8F3 /* grid.plist */; };
+		A81C74E016641C9C00A7D8F3 /* game.plist in Resources */ = {isa = PBXBuildFile; fileRef = A81C74DF16641C9C00A7D8F3 /* game.plist */; };
+		A81C74E316641D7C00A7D8F3 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A81C74E216641D7C00A7D8F3 /* GameViewController.m */; };
+		A81C74F61664259800A7D8F3 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A81C74F51664259800A7D8F3 /* HomeViewController.m */; };
+		A81C74F91664299100A7D8F3 /* InstructionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A81C74F81664299100A7D8F3 /* InstructionsViewController.m */; };
 		A8DDA981165AE6A7007D9483 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8DDA980165AE6A7007D9483 /* UIKit.framework */; };
 		A8DDA983165AE6A7007D9483 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8DDA982165AE6A7007D9483 /* Foundation.framework */; };
 		A8DDA985165AE6A7007D9483 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8DDA984165AE6A7007D9483 /* CoreGraphics.framework */; };
@@ -35,6 +40,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A81C74DC16641B5900A7D8F3 /* grid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = grid.plist; sourceTree = "<group>"; };
+		A81C74DF16641C9C00A7D8F3 /* game.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = game.plist; sourceTree = "<group>"; };
+		A81C74E116641D7C00A7D8F3 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		A81C74E216641D7C00A7D8F3 /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		A81C74F41664259800A7D8F3 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		A81C74F51664259800A7D8F3 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		A81C74F71664299100A7D8F3 /* InstructionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstructionsViewController.h; sourceTree = "<group>"; };
+		A81C74F81664299100A7D8F3 /* InstructionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstructionsViewController.m; sourceTree = "<group>"; };
 		A8DDA97C165AE6A7007D9483 /* Swap-Tac-Toe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swap-Tac-Toe.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8DDA980165AE6A7007D9483 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A8DDA982165AE6A7007D9483 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -116,8 +129,16 @@
 			children = (
 				A8DDA98F165AE6A7007D9483 /* AppDelegate.h */,
 				A8DDA990165AE6A7007D9483 /* AppDelegate.m */,
+				A81C74E116641D7C00A7D8F3 /* GameViewController.h */,
+				A81C74E216641D7C00A7D8F3 /* GameViewController.m */,
+				A81C74F41664259800A7D8F3 /* HomeViewController.h */,
+				A81C74F51664259800A7D8F3 /* HomeViewController.m */,
+				A81C74F71664299100A7D8F3 /* InstructionsViewController.h */,
+				A81C74F81664299100A7D8F3 /* InstructionsViewController.m */,
 				A8DDA9B5165AE8A2007D9483 /* Storyboard.storyboard */,
 				A8DDA987165AE6A7007D9483 /* Supporting Files */,
+				A81C74DC16641B5900A7D8F3 /* grid.plist */,
+				A81C74DF16641C9C00A7D8F3 /* game.plist */,
 			);
 			path = "Swap-Tac-Toe";
 			sourceTree = "<group>";
@@ -231,6 +252,8 @@
 				A8DDA995165AE6A7007D9483 /* Default@2x.png in Resources */,
 				A8DDA997165AE6A7007D9483 /* Default-568h@2x.png in Resources */,
 				A8DDA9B6165AE8A2007D9483 /* Storyboard.storyboard in Resources */,
+				A81C74DD16641B5900A7D8F3 /* grid.plist in Resources */,
+				A81C74E016641C9C00A7D8F3 /* game.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,6 +290,9 @@
 			files = (
 				A8DDA98D165AE6A7007D9483 /* main.m in Sources */,
 				A8DDA991165AE6A7007D9483 /* AppDelegate.m in Sources */,
+				A81C74E316641D7C00A7D8F3 /* GameViewController.m in Sources */,
+				A81C74F61664259800A7D8F3 /* HomeViewController.m in Sources */,
+				A81C74F91664299100A7D8F3 /* InstructionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,7 +392,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swap-Tac-Toe/Swap-Tac-Toe-Prefix.pch";
 				INFOPLIST_FILE = "Swap-Tac-Toe/Swap-Tac-Toe-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -379,7 +405,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swap-Tac-Toe/Swap-Tac-Toe-Prefix.pch";
 				INFOPLIST_FILE = "Swap-Tac-Toe/Swap-Tac-Toe-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -439,6 +465,7 @@
 				A8DDA9B1165AE6A7007D9483 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A8DDA9B2165AE6A7007D9483 /* Build configuration list for PBXNativeTarget "Swap-Tac-ToeTests" */ = {
 			isa = XCConfigurationList;
@@ -447,6 +474,7 @@
 				A8DDA9B4165AE6A7007D9483 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
