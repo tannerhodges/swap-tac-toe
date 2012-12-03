@@ -10,10 +10,24 @@
 
 @implementation InstructionsViewController
 
+// Synthesize properties
+@synthesize instructions;
+
+/*====================================================================
+    Yep... view did load... stuff.
+  ====================================================================*/
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    
+    // Get the current screen size
+    CGRect screenSize = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenSize.size.width;
+    CGFloat screenHeight = screenSize.size.height;
+    
+    // Set the size of the instructions label
+    instructions.frame = CGRectMake(0, 0, screenWidth-10, screenHeight-10);
 }
 
 - (void)didReceiveMemoryWarning

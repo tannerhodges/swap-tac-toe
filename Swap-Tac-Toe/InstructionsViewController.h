@@ -10,4 +10,7 @@
 
 @interface InstructionsViewController : UIViewController
 
+@property (nonatomic, strong) IBOutlet UIScrollView *sv;
+@property (nonatomic, strong) IBOutlet UILabel *instructions;
+
 @end
