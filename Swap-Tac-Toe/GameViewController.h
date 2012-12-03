@@ -10,6 +10,14 @@
 
 @interface GameViewController : UIViewController
 
+// Properties
+@property (nonatomic, strong) NSMutableArray *gridValues;
+
+// Methods
+-(void)initGridArray;
+-(void)setupGrid;
+
+// Actions
 -(IBAction)buttonWasPushed:(id)sender;
 
 @end
