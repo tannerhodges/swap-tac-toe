@@ -17,6 +17,7 @@
 @synthesize gridValues;
 
 // Global variables
+NSString *playerCharacter = @"-";
 int turn = 0;
 int gridSize[] = {3, 3};
 
@@ -36,16 +37,25 @@ int gridSize[] = {3, 3};
 
 
 -(void)initGridArray {
-    // Get them values to make stuff
-    int numCells = gridSize[0] * gridSize[1];
-    NSLog(@"Total # of cells: %d",numCells);
-    gridValues = [NSMutableArray arrayWithCapacity:numCells];
+    int numCols = gridSize[0];
+    int numRows = gridSize[0];
+//    int numCells = numCols * numRows;
     
-    // http://iphonedevsdk.com/forum/iphone-sdk-development/18363-how-to-add-a-value-to-an-nsarray.html
+    // Create columns
+    gridValues = [NSMutableArray arrayWithCapacity:numCols];
     
-    int x; // My pretty index to loop through all the possible values and set to nil
-    for(x=0; x<numCells; x++) {
-        [gridValues addObject:[NSString stringWithFormat:@""]];
+    // Create rows
+    for(int x=0; x<numCols; x++)
+        [gridValues insertObject:[NSMutableArray arrayWithCapacity:numRows] atIndex:x];
+    
+    // Initialize cells
+//    int index=0;
+    for(int x=0; x<numCols; x++) {
+        for(int y=0; y<numRows; y++) {
+            [gridValues[x] insertObject:[NSString stringWithFormat:@""] atIndex:y];
+//            [gridValues[x] insertObject:[NSString stringWithFormat:@"%d",index] atIndex:y];
+//            index++;
+        }
     }
     
     NSLog(@"Cell values in gridValues: %@",gridValues);
@@ -54,6 +64,10 @@ int gridSize[] = {3, 3};
 
 
 -(void)setupGrid {
+    int numCols = gridSize[0];
+    int numRows = gridSize[0];
+    //    int numCells = numCols * numRows;
+    
     // Grid parameters
     int buttonSize = self.view.frame.size.width / 5;
     int padding = 5;
@@ -72,35 +86,22 @@ int gridSize[] = {3, 3};
     
     // Setup an index and go, go, go
     int index = 0;
-    // Loop through rows
-    for(int y=0; y<gridSize[1]; y++) {
-        // Set y position
-        float newY = centerY + (y * (buttonSize + padding));
-        
-        // Loop through columns
-        for(int x=0; x<gridSize[0]; x++) {
-            // Set x position
-            float newX = centerX + (x * (buttonSize + padding));
-            
-            // Init button
-            UIButton *defaultButton = [[UIButton alloc] init];
-            // Add action
-            [defaultButton addTarget:self action:@selector(buttonWasPushed:) forControlEvents:UIControlEventTouchUpInside];
-            // Set background color
-            defaultButton.backgroundColor = [UIColor blueColor];
-            // Set default text (title)
-//            NSLog(@"%@",gridValues[x]);
-//            defaultButton.titleLabel.text = @"-";
-            [defaultButton setTitle:gridValues[index] forState:UIControlStateNormal];
-            // Set unique tag id
-            defaultButton.tag = index;
-            // Set frame
-            defaultButton.frame = CGRectMake(newX,newY,buttonSize,buttonSize);
-            
-            //          NSLog(@"%@",NSStringFromCGRect(defaultButton.frame));
-            
-            // Add to view
-            [self.view addSubview:defaultButton];
+    // Loop through columns
+    for(int x=0; x<numCols; x++) {
+        float newX = centerX + (x * (buttonSize + padding));
+
+        // Loop through rows
+        for(int y=0; y<numRows; y++) {
+            float newY = centerY + (y * (buttonSize + padding));
+
+            // Create button per cell
+            UIButton *defaultButton = [[UIButton alloc] init]; // Init button
+            [defaultButton addTarget:self action:@selector(buttonWasPushed:) forControlEvents:UIControlEventTouchUpInside]; // Add action
+            defaultButton.backgroundColor = [UIColor blueColor]; // Set background color
+            [defaultButton setTitle:gridValues[x][y] forState:UIControlStateNormal]; // Set default text (title)
+            defaultButton.tag = index; // Set unique tag id
+            defaultButton.frame = CGRectMake(newX,newY,buttonSize,buttonSize); // Set frame
+            [self.view addSubview:defaultButton]; // Add to view
             
             // Log and reset
             printf("Added button %d to view.\n", index);
@@ -108,6 +109,7 @@ int gridSize[] = {3, 3};
             index++;
         }
     }
+
     // Fun debug statement:
     // po [_view recursiveDescription]
 }
@@ -133,10 +135,7 @@ int gridSize[] = {3, 3};
     UIButton *button = [[UIButton alloc] init];
     button = sender;
     
-    // Set current player's character
-    NSString *playerCharacter = @"-";
-    if(turn%2==0) { playerCharacter = @"X"; }
-    else { playerCharacter = @"O"; }
+    [self setCurrentPlayerCharacter];
     
     // Check to see if anyone's already moved here
     NSString *currentCharacter = button.titleLabel.text;
@@ -156,6 +155,61 @@ int gridSize[] = {3, 3};
     }
 }
 
+
+
+-(void)setCurrentPlayerCharacter {
+    // Set current player's character
+    if(turn%2==0) { playerCharacter = @"X"; }
+    else { playerCharacter = @"O"; }
+}
+
+
+
+// Variation of code from http://stackoverflow.com/questions/1056316/algorithm-for-determining-tic-tac-toe-game-over-java
+/* -(void)checkWin {
+    bool win = false;
+    int n = gridSize[0];
+
+    //check col
+    for(int i = 0; i < n; i++){
+        if(gridValues[x][i] != playerCharacter)
+            break;
+        if(i == n-1){
+            //report win for s
+            win = true;
+        }
+    }
+
+    //check row
+    for(int i = 0; i < n; i++){
+        if(board[i][y] != playerCharacter)
+            break;
+        if(i == n-1){
+            //report win for s
+        }
+    }
+
+    //check diag
+    if(x == y){
+        //we're on a diagonal
+        for(int i = 0; i < n; i++){
+            if(board[i][i] != playerCharacter)
+                break;
+            if(i == n-1){
+                //report win for s
+            }
+        }
+    }
+
+    //check anti diag (thanks rampion)
+    for(int i = 0;i<n;i++){
+        if(board[i][(n-1)-i] != playerCharacter)
+            break;
+        if(i == n-1){
+            //report win for s
+        }
+    }
+} */
 
 
 
