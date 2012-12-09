@@ -45,7 +45,7 @@ int gridSize[] = {3, 3};
     
     int x; // My pretty index to loop through all the possible values and set to nil
     for(x=0; x<numCells; x++) {
-        [gridValues addObject:[NSString stringWithFormat:@"%d", x]];
+        [gridValues addObject:[NSString stringWithFormat:@""]];
     }
     
     NSLog(@"Cell values in gridValues: %@",gridValues);
@@ -138,14 +138,22 @@ int gridSize[] = {3, 3};
     if(turn%2==0) { playerCharacter = @"X"; }
     else { playerCharacter = @"O"; }
     
-    // Change the UILabel text value to current player's symbol
-    [sender setTitle:playerCharacter forState:UIControlStateNormal];
-    
-    // Log the action
-    printf("Button %d was pushed.\n", button.tag);
-
-    // Increment the current turn / which player's turn it is
-    turn++;
+    // Check to see if anyone's already moved here
+    NSString *currentCharacter = button.titleLabel.text;
+    if([currentCharacter length] == 0) {
+        // Change the UILabel text value to current player's symbol
+        [sender setTitle:playerCharacter forState:UIControlStateNormal];
+        
+        // Log the action
+        printf("Button %d was pushed.\n", button.tag);
+        
+        // Increment the current turn / which player's turn it is
+        turn++;
+    }
+    else {
+        // Log the action
+        printf("Space already taken. Try another one!\n");
+    }
 }
 
 

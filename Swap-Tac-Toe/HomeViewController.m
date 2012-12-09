@@ -10,14 +10,25 @@
 
 @implementation HomeViewController
 
+@synthesize beginButton, instructionsButton;
+
 -(void)viewDidLoad {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
+
     // Create title
     // Create logo image
-    
-    // Create Begin button
+/*
+    // beginButton
+    float buttonWidth = beginButton.frame.size.width;
+    float buttonHeight = beginButton.frame.size.height;
+    float centerX = (self.view.frame.size.width/2)-(buttonWidth/2);
+    float centerY = (self.view.frame.size.height/2)-(buttonHeight/2);
+    beginButton.frame = CGRectMake(centerX,centerY,buttonWidth,buttonHeight);
+*/
+
+//    beginButton.backgroundColor = [UIColor blueColor];
+//    [beginButton setTitle:@"Begin" forState:UIControlStateNormal];
+
     // Create Instructions button
 }
 

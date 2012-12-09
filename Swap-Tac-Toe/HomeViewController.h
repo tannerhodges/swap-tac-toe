@@ -10,4 +10,6 @@
 
 @interface HomeViewController : UIViewController
 
+@property (nonatomic, strong) IBOutlet UIButton *beginButton, *instructionsButton;
+
 @end
