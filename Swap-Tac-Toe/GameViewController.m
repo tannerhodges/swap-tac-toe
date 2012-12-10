@@ -18,8 +18,12 @@
 
 // Global variables
 NSString *playerCharacter = @"-";
+int gridSize = 3;
+
+// Game variables
+bool gameWon = false;
+NSString *winner = @"The Cat";
 int turn = 0;
-int gridSize[] = {3, 3};
 
 
 
@@ -28,7 +32,8 @@ int gridSize[] = {3, 3};
     [super viewDidLoad];
     
     // Setup game
-    // turn = 0;
+    gameWon = false;
+    turn = 0;
     
     [self initGridArray];
     [self setupGrid];
@@ -37,23 +42,18 @@ int gridSize[] = {3, 3};
 
 
 -(void)initGridArray {
-    int numCols = gridSize[0];
-    int numRows = gridSize[0];
-//    int numCells = numCols * numRows;
-    
     // Create columns
-    gridValues = [NSMutableArray arrayWithCapacity:numCols];
+    gridValues = [NSMutableArray arrayWithCapacity:gridSize];
     
     // Create rows
-    for(int x=0; x<numCols; x++)
-        [gridValues insertObject:[NSMutableArray arrayWithCapacity:numRows] atIndex:x];
+    for(int x=0; x<gridSize; x++)
+        [gridValues insertObject:[NSMutableArray arrayWithCapacity:gridSize] atIndex:x];
     
     // Initialize cells
 //    int index=0;
-    for(int x=0; x<numCols; x++) {
-        for(int y=0; y<numRows; y++) {
+    for(int y=0; y<gridSize; y++) { // Remember to loop from the outside in!
+        for(int x=0; x<gridSize; x++) {
             [gridValues[x] insertObject:[NSString stringWithFormat:@""] atIndex:y];
-//            [gridValues[x] insertObject:[NSString stringWithFormat:@"%d",index] atIndex:y];
 //            index++;
         }
     }
@@ -64,16 +64,12 @@ int gridSize[] = {3, 3};
 
 
 -(void)setupGrid {
-    int numCols = gridSize[0];
-    int numRows = gridSize[0];
-    //    int numCells = numCols * numRows;
-    
     // Grid parameters
     int buttonSize = self.view.frame.size.width / 5;
     int padding = 5;
     
     // Dynamic variables for grid size and position
-    int totalGridSize = (buttonSize*gridSize[0])+(padding*(gridSize[0]-1));
+    int totalGridSize = (buttonSize*gridSize)+(padding*(gridSize-1));
     float centerX = (self.view.frame.size.width/2)-(totalGridSize/2);
     float centerY = (self.view.frame.size.height/2)-(totalGridSize/2);
     
@@ -86,13 +82,13 @@ int gridSize[] = {3, 3};
     
     // Setup an index and go, go, go
     int index = 0;
-    // Loop through columns
-    for(int x=0; x<numCols; x++) {
-        float newX = centerX + (x * (buttonSize + padding));
-
-        // Loop through rows
-        for(int y=0; y<numRows; y++) {
-            float newY = centerY + (y * (buttonSize + padding));
+    // Loop through rows
+    for(int y=0; y<gridSize; y++) { // Remember to loop from the outside in!
+        float newY = centerY + (y * (buttonSize + padding));
+        
+        // Loop through columns
+        for(int x=0; x<gridSize; x++) {
+            float newX = centerX + (x * (buttonSize + padding));
 
             // Create button per cell
             UIButton *defaultButton = [[UIButton alloc] init]; // Init button
@@ -135,23 +131,44 @@ int gridSize[] = {3, 3};
     UIButton *button = [[UIButton alloc] init];
     button = sender;
     
+    // Log the action
+    printf("Button %d was pushed.\n", button.tag);
+    
     [self setCurrentPlayerCharacter];
     
     // Check to see if anyone's already moved here
     NSString *currentCharacter = button.titleLabel.text;
-    if([currentCharacter length] == 0) {
-        // Change the UILabel text value to current player's symbol
-        [sender setTitle:playerCharacter forState:UIControlStateNormal];
-        
-        // Log the action
-        printf("Button %d was pushed.\n", button.tag);
-        
-        // Increment the current turn / which player's turn it is
-        turn++;
+    if(gameWon) {
+        printf("The game's over. Start another one!\n");
     }
     else {
-        // Log the action
-        printf("Space already taken. Try another one!\n");
+        if([currentCharacter length] == 0) {
+            // Update cell in gridValues
+            // Do a bit of a roundabout to get the x and y values for cell position...
+            NSArray *cellPos = [self getCellPos:button.tag];
+            int cellX = [cellPos[0] intValue];
+            int cellY = [cellPos[1] intValue];
+            // Update and log...
+            gridValues[cellX][cellY] = playerCharacter;
+            NSLog(@"Cell values in gridValues: %@",gridValues);
+            
+            // Update UILabel text value to current player's symbol
+            [sender setTitle:playerCharacter forState:UIControlStateNormal];
+            
+            // If somebody won, say something!
+            [self checkWin];
+            if(gameWon) {
+                NSLog(@"%@ wins!",winner);
+            }
+            else {
+                // Otherwise, next person's turn
+                turn++;
+            }
+        }
+        else {
+            // Log the action
+            printf("Space already taken. Try another one!\n");
+        }
     }
 }
 
@@ -163,53 +180,72 @@ int gridSize[] = {3, 3};
     else { playerCharacter = @"O"; }
 }
 
+-(NSArray *)getCellPos:(int) tag {
+    int xPos = tag%gridSize;
+    int yPos = (tag-xPos)/gridSize;
+    
+    NSNumber *cellX = [NSNumber numberWithInt:xPos];
+    NSNumber *cellY = [NSNumber numberWithInt:yPos];
+
+    NSArray *cellPos = [[NSArray alloc] initWithObjects:cellX, cellY, nil];
+    return cellPos;
+}
+
 
 
 // Variation of code from http://stackoverflow.com/questions/1056316/algorithm-for-determining-tic-tac-toe-game-over-java
-/* -(void)checkWin {
-    bool win = false;
-    int n = gridSize[0];
-
-    //check col
-    for(int i = 0; i < n; i++){
-        if(gridValues[x][i] != playerCharacter)
-            break;
-        if(i == n-1){
-            //report win for s
-            win = true;
-        }
-    }
-
-    //check row
-    for(int i = 0; i < n; i++){
-        if(board[i][y] != playerCharacter)
-            break;
-        if(i == n-1){
-            //report win for s
-        }
-    }
-
-    //check diag
-    if(x == y){
-        //we're on a diagonal
-        for(int i = 0; i < n; i++){
-            if(board[i][i] != playerCharacter)
-                break;
-            if(i == n-1){
-                //report win for s
+-(void)checkWin {
+    // Check rows
+    for(int y=0; y<gridSize; y++) { // Remember to loop from the outside in!
+        for(int x=1; x<gridSize; x++) {
+            // If the space matches the one before it...
+            if(![gridValues[x][y] isEqualToString:gridValues[x-1][y]]) { break; }
+            if(x == gridSize-1 && [gridValues[x][y] length] > 0) {
+                gameWon = true;
+                winner = gridValues[x][y];
             }
         }
     }
-
-    //check anti diag (thanks rampion)
-    for(int i = 0;i<n;i++){
-        if(board[i][(n-1)-i] != playerCharacter)
-            break;
-        if(i == n-1){
-            //report win for s
+    
+    if(gameWon) { return; }
+    
+    // Check columns
+    for(int x=0; x<gridSize; x++) {
+        for(int y=1; y<gridSize; y++) {
+            // If the space matches the one before it...
+            if(![gridValues[x][y] isEqualToString:gridValues[x][y-1]]) { break; }
+            if(y == gridSize-1 && [gridValues[x][y] length] > 0) {
+                gameWon = true;
+                winner = gridValues[x][y];
+            }
         }
     }
-} */
+    
+    if(gameWon) { return; }
+    
+    // Check diag 1
+    for(int i=1; i<gridSize; i++) {
+        if(![gridValues[i][i] isEqualToString:gridValues[i-1][i-1]]) { break; }
+        if(i == gridSize-1 && [gridValues[i][i] length] > 0) {
+            gameWon = true;
+            winner = gridValues[i][i];
+        }
+    }
+    
+    if(gameWon) { return; }
+    
+    // Check diag 2
+    for(int i=1; i<gridSize; i++) {
+        // Remember we're going backwards, so the previous space == +1!
+        if(![gridValues[(gridSize-1)-i][i] isEqualToString:gridValues[(gridSize-1)-i+1][i-1]]) { break; }
+        if(i == gridSize-1 && [gridValues[(gridSize-1)-i][i] length] > 0) {
+            gameWon = true;
+            winner = gridValues[(gridSize-1)-i][i];
+        }
+    }
+    
+    if(gameWon) { return; }
+}
 
 
 
