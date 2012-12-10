@@ -15,6 +15,8 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
 
+    // I was going to set this stuff up programmatically, but decided not too... Maybe another day. 
+    
     // Create title
     // Create logo image
 /*

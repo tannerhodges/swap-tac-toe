@@ -14,14 +14,14 @@
 @implementation GameViewController
 
 // Synthesize properties
-@synthesize gridValues;
+@synthesize gridValues, statusLabel;
 
 // Global variables
 NSString *playerCharacter = @"-";
 int gridSize = 3;
 
 // Game variables
-bool gameWon = false;
+bool gameOver = false;
 NSString *winner = @"The Cat";
 int turn = 0;
 
@@ -31,8 +31,16 @@ int turn = 0;
     // Make sure we get everything from the super method
     [super viewDidLoad];
     
+    statusLabel.text = @"X, you go first";
+    
     // Setup game
-    gameWon = false;
+    [self resetGame];
+}
+
+
+
+-(void)resetGame {
+    gameOver = false;
     turn = 0;
     
     [self initGridArray];
@@ -71,7 +79,8 @@ int turn = 0;
     // Dynamic variables for grid size and position
     int totalGridSize = (buttonSize*gridSize)+(padding*(gridSize-1));
     float centerX = (self.view.frame.size.width/2)-(totalGridSize/2);
-    float centerY = (self.view.frame.size.height/2)-(totalGridSize/2);
+//    float centerY = (self.view.frame.size.height/2)-(totalGridSize/2);
+    float centerY = 100;
     
     /*  // Get a crosshair on that center
      UIButton *temp = [[UIButton alloc] init];
@@ -138,7 +147,7 @@ int turn = 0;
     
     // Check to see if anyone's already moved here
     NSString *currentCharacter = button.titleLabel.text;
-    if(gameWon) {
+    if(gameOver) {
         printf("The game's over. Start another one!\n");
     }
     else {
@@ -157,12 +166,23 @@ int turn = 0;
             
             // If somebody won, say something!
             [self checkWin];
-            if(gameWon) {
-                NSLog(@"%@ wins!",winner);
+            if(gameOver) {
+                statusLabel.text = [NSString stringWithFormat:@"%@ wins!",winner];
+//                NSLog(@"%@ wins!",winner);
             }
             else {
                 // Otherwise, next person's turn
                 turn++;
+                NSLog(@"Turn #%d",turn);
+                
+                if(turn > ((gridSize*gridSize)-1)) {
+                    statusLabel.text = @"The game is a draw!";
+                    gameOver = true;
+                }
+                else {
+                    [self setCurrentPlayerCharacter];
+                    statusLabel.text = [NSString stringWithFormat:@"%@, it's your turn", playerCharacter];
+                }
             }
         }
         else {
@@ -172,6 +192,11 @@ int turn = 0;
     }
 }
 
+
+
+-(IBAction)newGameButtonWasPushed:(id)sender {
+    [self resetGame];
+}
 
 
 -(void)setCurrentPlayerCharacter {
@@ -201,13 +226,13 @@ int turn = 0;
             // If the space matches the one before it...
             if(![gridValues[x][y] isEqualToString:gridValues[x-1][y]]) { break; }
             if(x == gridSize-1 && [gridValues[x][y] length] > 0) {
-                gameWon = true;
+                gameOver = true;
                 winner = gridValues[x][y];
             }
         }
     }
     
-    if(gameWon) { return; }
+    if(gameOver) { return; }
     
     // Check columns
     for(int x=0; x<gridSize; x++) {
@@ -215,36 +240,36 @@ int turn = 0;
             // If the space matches the one before it...
             if(![gridValues[x][y] isEqualToString:gridValues[x][y-1]]) { break; }
             if(y == gridSize-1 && [gridValues[x][y] length] > 0) {
-                gameWon = true;
+                gameOver = true;
                 winner = gridValues[x][y];
             }
         }
     }
     
-    if(gameWon) { return; }
+    if(gameOver) { return; }
     
     // Check diag 1
     for(int i=1; i<gridSize; i++) {
         if(![gridValues[i][i] isEqualToString:gridValues[i-1][i-1]]) { break; }
         if(i == gridSize-1 && [gridValues[i][i] length] > 0) {
-            gameWon = true;
+            gameOver = true;
             winner = gridValues[i][i];
         }
     }
     
-    if(gameWon) { return; }
+    if(gameOver) { return; }
     
     // Check diag 2
     for(int i=1; i<gridSize; i++) {
         // Remember we're going backwards, so the previous space == +1!
         if(![gridValues[(gridSize-1)-i][i] isEqualToString:gridValues[(gridSize-1)-i+1][i-1]]) { break; }
         if(i == gridSize-1 && [gridValues[(gridSize-1)-i][i] length] > 0) {
-            gameWon = true;
+            gameOver = true;
             winner = gridValues[(gridSize-1)-i][i];
         }
     }
     
-    if(gameWon) { return; }
+    if(gameOver) { return; }
 }
 
 
